@@ -1,4 +1,4 @@
-﻿using gis_photo_sharing_app.Application.Common.Exceptions;
+using gis_photo_sharing_app.Application.Common.Exceptions;
 using gis_photo_sharing_app.Application.Common.Interfaces;
 using gis_photo_sharing_app.Domain.Entities;
 using MediatR;
@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace gis_photo_sharing_app.Application.TodoLists.Commands.UpdateTodoList
 {
-    public class UpdateTodoListCommand : IRequest
+    public class UpdateTodoListCommand : IRequest<Unit>
     {
         public int Id { get; set; }
 
         public string Title { get; set; }
     }
 
-    public class UpdateTodoListCommandHandler : IRequestHandler<UpdateTodoListCommand>
+    public class UpdateTodoListCommandHandler : IRequestHandler<UpdateTodoListCommand, Unit>
     {
         private readonly IApplicationDbContext _context;
 
@@ -35,7 +35,6 @@ namespace gis_photo_sharing_app.Application.TodoLists.Commands.UpdateTodoList
             entity.Title = request.Title;
 
             await _context.SaveChangesAsync(cancellationToken);
-
             return Unit.Value;
         }
     }

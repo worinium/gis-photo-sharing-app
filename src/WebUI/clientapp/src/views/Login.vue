@@ -1,159 +1,189 @@
 <template>
-<!-- <div class="login container">
-
-            <form class="was-validated">
-                <div class="form-group">
-                    <label for="uname" class="float-left">Username:</label>
-                    <input type="text" class="form-control" id="uname" placeholder="Enter username" name="uname" required />
-                    <div class="valid-feedback">Valid.</div>
-                    <div class="invalid-feedback">Please fill out this field.</div>
-                </div>
-                <div class="form-group">
-                    <label for="pwd" class="float-left">Password:</label>
-                    <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="pswd" required />
-                    <div class="valid-feedback">Valid.</div>
-                    <div class="invalid-feedback">Please fill out this field.</div>
-                </div>
-                <div class="form-group form-check">
-                    <label class="form-check-label">
-                        <input class="form-check-input" type="checkbox" name="remember" required />
-                        I agree on blabla.
-                        <div class="valid-feedback">Valid.</div>
-                        <div class="invalid-feedback">Check this checkbox to continue.</div>
-                    </label>
-                </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
-        </div>
-    </div>
-</div> -->
-<div>
-    <div class="container">
-        <form action="/action_page.php">
-
-            <h2 style="text-align:center">Login with Social Media or Manually</h2>
-            <div class="row">
-
-                <div class="col-5">
-                    <div class="card text-white bg-light navbar-light " style="max-width: 45rem; height:420px; margin-top:5vh">
-                        <div class="card-header" style="color:green">Social login</div>
-                        <div class="card-body">
-
-                            <div class="row">
-                                <div class="col-3 my-auto">
-                                    <a href="#" class="btn btn-warning btn-lg btn-block">
-                                        <i class="fa fa-facebook fa-fw"></i>
-                                    </a>
-                                    <a href="#" class="btn btn-primary btn-lg btn-block">
-                                        <i class="fa fa-google fa-fw"></i>
-                                    </a>
-                                    <a href="#" class="btn btn-success btn-lg btn-block">
-                                        <i class="fa fa-linkedin fa-fw"></i>
-                                    </a>
-
-                                    <a href="#" class="btn btn-secondary btn-lg btn-block">
-                                        <i class="fa fa-twitter fa-fw"></i>
-                                    </a>
-                                </div>
-                                <div class="col-9">
-                                    <a href="#" class="btn btn-warning btn-lg btn-block"> Login with Facebook
-                                    </a>
-                                    <a href="#" class="btn btn-primary btn-lg btn-block"> Login with Google+
-                                    </a>
-                                    <a href="#" class="btn btn-success btn-lg btn-block"> LinkedIn
-                                    </a>
-
-                                    <a href="#" class="btn btn-secondary btn-lg btn-block"> Login with Twitter
-                                    </a>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-2 my-auto">
-
-                    <div>
-                        <span class="vl-innertext">or</span>
-                    </div>
-                </div>
-                <div class="col-5">
-                    <div class="card text-white bg-light navbar-light " style="max-width: 45rem; height:420px; margin-top:5vh">
-                        <div class="card-header" style="color:green">Manual Login</div>
-                        <div class=" card-body">
-                            <form class="was-validated">
-                                <div class="form-group">
-                                    <label for="uname" class="float-left">Username:</label>
-                                    <input type="text" class="form-control" id="uname" placeholder="Enter username" name="uname" required />
-                                    <div class="valid-feedback">Valid.</div>
-                                    <div class="invalid-feedback">Please fill out this field.</div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="pwd" class="float-left">Password:</label>
-                                    <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="pswd" required />
-                                    <div class="valid-feedback">Valid.</div>
-                                    <div class="invalid-feedback">Please fill out this field.</div>
-                                </div>
-                                <div class="form-group form-check">
-                                    <label class="form-check-label">
-                                        <input class="form-check-input" type="checkbox" name="remember" required />
-                                        I agree on blabla.
-                                        <div class="valid-feedback">Valid.</div>
-                                        <div class="invalid-feedback">Check this checkbox to continue.</div>
-                                    </label>
-                                </div>
-                                <button type="submit" class="btn btn-primary">Submit</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
+  <div class="auth-page">
+    <div class="auth-panel">
+      <header class="auth-panel__head">
+        <div class="auth-panel__icon" aria-hidden="true">◉</div>
+        <h1 class="auth-panel__title">Welcome back</h1>
+        <p class="auth-panel__sub">Sign in to upload photos and manage your gallery.</p>
+      </header>
+      <div class="auth-panel__body">
+        <form @submit.prevent="submit" novalidate>
+          <div class="form-group">
+            <label class="auth-label" for="login-email">Email</label>
+            <input
+              id="login-email"
+              v-model="form.email"
+              type="email"
+              class="form-control auth-input"
+              required
+              placeholder="you@example.com"
+              autocomplete="email"
+            />
+          </div>
+          <div class="form-group">
+            <label class="auth-label" for="login-password">Password</label>
+            <input
+              id="login-password"
+              v-model="form.password"
+              type="password"
+              class="form-control auth-input"
+              required
+              autocomplete="current-password"
+            />
+          </div>
+          <p v-if="error" class="auth-error" role="alert">{{ error }}</p>
+          <button type="submit" class="btn auth-btn btn-block" :disabled="loading">
+            {{ loading ? "Signing in…" : "Log in" }}
+          </button>
         </form>
+        <p class="auth-switch">
+          Don’t have an account?
+          <router-link to="/SignUp">Create one</router-link>
+        </p>
+      </div>
     </div>
-
-    <div class="bottom-container">
-        <div class="row">
-            <div class="col">
-                <a href="#" style="color:white" class="btn">Sign up</a>
-            </div>
-            <div class="col">
-                <a href="#" style="color:white" class="btn">Forgot password?</a>
-            </div>
-        </div>
-    </div>
-</div>
+  </div>
 </template>
 
-<script scoped>
+<script>
 export default {
-    data() {
-        return {
-
-        }
+  name: "Login",
+  data() {
+    return {
+      form: { email: "", password: "" },
+      loading: false,
+      error: "",
+    };
+  },
+  methods: {
+    async submit() {
+      this.loading = true;
+      this.error = "";
+      try {
+        await this.$store.dispatch("login", {
+          email: this.form.email,
+          password: this.form.password,
+        });
+        const redirect = this.$route.query.redirect || "/";
+        this.$router.push(redirect);
+      } catch (e) {
+        this.error = e.message || "Sign in failed.";
+      }
+      this.loading = false;
     },
-    methods: {
-
-    },
-    created: {
-
-    }
-
-}
+  },
+};
 </script>
 
 <style scoped>
-/* .login {
-    width: 500px;
+.auth-panel {
+  width: 100%;
+  max-width: 420px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 12px 40px rgba(15, 23, 42, 0.1), 0 4px 12px rgba(15, 23, 42, 0.06);
+  overflow: hidden;
+  border: 1px solid rgba(148, 163, 184, 0.25);
 }
 
-@media (max-width: 880px) {
+.auth-panel__head {
+  background: linear-gradient(145deg, #0f172a 0%, #1e3a5f 55%, #0c4a6e 100%);
+  color: #f8fafc;
+  padding: 1.75rem 1.5rem 1.5rem;
+  text-align: center;
+}
 
-    .login {
-        display: block;
-        width: 100%;
-        text-align: center;
-    }
+.auth-panel__icon {
+  font-size: 2rem;
+  line-height: 1;
+  color: #38bdf8;
+  margin-bottom: 0.5rem;
+}
 
-} */
+.auth-panel__title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin: 0 0 0.35rem;
+}
+
+.auth-panel__sub {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #cbd5e1;
+  line-height: 1.45;
+}
+
+.auth-panel__body {
+  padding: 1.75rem 1.5rem 1.5rem;
+}
+
+.auth-label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 0.35rem;
+}
+
+.auth-input {
+  border-radius: 10px;
+  border: 1px solid #cbd5e1;
+  padding: 0.65rem 0.85rem;
+  font-size: 1rem;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.auth-input:focus {
+  border-color: #0ea5e9;
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2);
+}
+
+.auth-error {
+  color: #dc2626;
+  font-size: 0.85rem;
+  margin: -0.25rem 0 0.75rem;
+}
+
+.auth-btn {
+  margin-top: 0.25rem;
+  padding: 0.7rem 1rem;
+  font-weight: 600;
+  font-size: 1rem;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(180deg, #0ea5e9 0%, #0284c7 100%);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(14, 165, 233, 0.35);
+}
+
+.auth-btn:hover:not(:disabled) {
+  background: linear-gradient(180deg, #38bdf8 0%, #0ea5e9 100%);
+  color: #fff;
+}
+
+.auth-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.auth-switch {
+  margin: 1.25rem 0 0;
+  padding-top: 1.25rem;
+  border-top: 1px solid #e2e8f0;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #64748b;
+  margin-bottom: 0;
+}
+
+.auth-switch a {
+  font-weight: 600;
+  color: #0284c7;
+}
+
+.auth-switch a:hover {
+  color: #0369a1;
+  text-decoration: none;
+}
 </style>

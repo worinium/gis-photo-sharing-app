@@ -1,38 +1,37 @@
-﻿using gis_photo_sharing_app.Application.Common.Interfaces;
-using gis_photo_sharing_app.Domain.Common;
-using gis_photo_sharing_app.Domain.Entities;
-using gis_photo_sharing_app.Infrastructure.Identity;
-using IdentityServer4.EntityFramework.Options;
-using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.Extensions.Options;
 using System.Data;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using gis_photo_sharing_app.Application.Common.Interfaces;
+using gis_photo_sharing_app.Domain.Common;
+using gis_photo_sharing_app.Domain.Entities;
+using gis_photo_sharing_app.Infrastructure.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace gis_photo_sharing_app.Infrastructure.Persistence
 {
-    public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>, IApplicationDbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplicationDbContext
     {
         private readonly ICurrentUserService _currentUserService;
         private readonly IDateTime _dateTime;
-        private IDbContextTransaction _currentTransaction;
+        private IDbContextTransaction? _currentTransaction;
 
         public ApplicationDbContext(
-            DbContextOptions options,
-            IOptions<OperationalStoreOptions> operationalStoreOptions,
+            DbContextOptions<ApplicationDbContext> options,
             ICurrentUserService currentUserService,
-            IDateTime dateTime) : base(options, operationalStoreOptions)
+            IDateTime dateTime) : base(options)
         {
             _currentUserService = currentUserService;
             _dateTime = dateTime;
         }
 
-        public DbSet<TodoList> TodoLists { get; set; }
+        public DbSet<TodoList> TodoLists => Set<TodoList>();
 
-        public DbSet<TodoItem> TodoItems { get; set; }
+        public DbSet<TodoItem> TodoItems => Set<TodoItem>();
+
+        public DbSet<Photo> Photos => Set<Photo>();
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
@@ -41,11 +40,12 @@ namespace gis_photo_sharing_app.Infrastructure.Persistence
                 switch (entry.State)
                 {
                     case EntityState.Added:
-                        entry.Entity.CreatedBy = _currentUserService.UserId;
+                        entry.Entity.CreatedBy = _currentUserService.UserId ?? string.Empty;
                         entry.Entity.Created = _dateTime.Now;
+                        entry.Entity.LastModifiedBy = entry.Entity.CreatedBy;
                         break;
                     case EntityState.Modified:
-                        entry.Entity.LastModifiedBy = _currentUserService.UserId;
+                        entry.Entity.LastModifiedBy = _currentUserService.UserId ?? string.Empty;
                         entry.Entity.LastModified = _dateTime.Now;
                         break;
                 }

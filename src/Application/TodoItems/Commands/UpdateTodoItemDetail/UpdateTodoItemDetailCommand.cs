@@ -1,4 +1,4 @@
-﻿using gis_photo_sharing_app.Application.Common.Exceptions;
+using gis_photo_sharing_app.Application.Common.Exceptions;
 using gis_photo_sharing_app.Application.Common.Interfaces;
 using gis_photo_sharing_app.Domain.Entities;
 using gis_photo_sharing_app.Domain.Enums;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace gis_photo_sharing_app.Application.TodoItems.Commands.UpdateTodoItemDetail
 {
-    public class UpdateTodoItemDetailCommand : IRequest
+    public class UpdateTodoItemDetailCommand : IRequest<Unit>
     {
         public int Id { get; set; }
 
@@ -19,7 +19,7 @@ namespace gis_photo_sharing_app.Application.TodoItems.Commands.UpdateTodoItemDet
         public string Note { get; set; }
     }
 
-    public class UpdateTodoItemDetailCommandHandler : IRequestHandler<UpdateTodoItemDetailCommand>
+    public class UpdateTodoItemDetailCommandHandler : IRequestHandler<UpdateTodoItemDetailCommand, Unit>
     {
         private readonly IApplicationDbContext _context;
 
@@ -42,7 +42,6 @@ namespace gis_photo_sharing_app.Application.TodoItems.Commands.UpdateTodoItemDet
             entity.Note = request.Note;
 
             await _context.SaveChangesAsync(cancellationToken);
-
             return Unit.Value;
         }
     }

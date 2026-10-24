@@ -1,4 +1,4 @@
-﻿using gis_photo_sharing_app.Application.Common.Exceptions;
+using gis_photo_sharing_app.Application.Common.Exceptions;
 using gis_photo_sharing_app.Application.Common.Interfaces;
 using gis_photo_sharing_app.Domain.Entities;
 using MediatR;
@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace gis_photo_sharing_app.Application.TodoItems.Commands.DeleteTodoItem
 {
-    public class DeleteTodoItemCommand : IRequest
+    public class DeleteTodoItemCommand : IRequest<Unit>
     {
         public int Id { get; set; }
     }
 
-    public class DeleteTodoItemCommandHandler : IRequestHandler<DeleteTodoItemCommand>
+    public class DeleteTodoItemCommandHandler : IRequestHandler<DeleteTodoItemCommand, Unit>
     {
         private readonly IApplicationDbContext _context;
 
@@ -33,7 +33,6 @@ namespace gis_photo_sharing_app.Application.TodoItems.Commands.DeleteTodoItem
             _context.TodoItems.Remove(entity);
 
             await _context.SaveChangesAsync(cancellationToken);
-
             return Unit.Value;
         }
     }
